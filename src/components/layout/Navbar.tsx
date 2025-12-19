@@ -2,7 +2,8 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { Menu, X, Car, Phone } from "lucide-react";
+import Image from "next/image";
+import { Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export function Navbar() {
@@ -35,8 +36,16 @@ export function Navbar() {
         >
             <div className="container mx-auto px-6 flex items-center justify-between">
                 {/* Logo */}
-                <Link href="/" className="text-2xl font-bold tracking-tighter flex items-center gap-2">
-                    <span className="font-heading">HSM</span>
+                <Link href="/" className="relative h-6 w-32 md:w-36">
+                    <Image
+                        src="/images/hyundai-logo.svg"
+                        alt="Hyundai"
+                        fill
+                        className="object-contain"
+                        style={{
+                            filter: !isScrolled ? "brightness(0) invert(1)" : "none"
+                        }}
+                    />
                 </Link>
 
                 {/* Desktop Menu */}
@@ -50,6 +59,16 @@ export function Navbar() {
                             {link.name}
                         </Link>
                     ))}
+
+                    {/* Language Switcher */}
+                    <div className={cn(
+                        "flex items-center gap-2 text-sm font-bold border-l pl-6",
+                        isScrolled ? "border-hsm-blue/20" : "border-white/20"
+                    )}>
+                        <span className="cursor-pointer hover:text-hsm-sand transition-colors">EN</span>
+                        <span className="opacity-50">|</span>
+                        <span className="cursor-pointer opacity-50 hover:opacity-100 hover:text-hsm-sand transition-colors">ID</span>
+                    </div>
                 </div>
 
                 {/* CTA Button */}
