@@ -3,17 +3,35 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 import { cars } from "@/data/cars";
 import { ArrowLeft, Check, Phone, ShieldCheck } from "lucide-react";
+import { client } from "@/sanity/lib/client";
+import { CAR_BY_SLUG_QUERY, CAR_SLUGS_QUERY } from "@/sanity/lib/queries";
+import { mapSanityCarToCar } from "@/sanity/lib/mapper";
 
-// Generate segments for all cars
+// Generate segments for all cars (Mock + Sanity)
 export async function generateStaticParams() {
-    return cars.map((car) => ({
-        id: car.id,
-    }));
+    const mockParams = cars.map((car) => ({ id: car.id }));
+    try {
+        const slugs = await client.fetch(CAR_SLUGS_QUERY);
+        const sanityParams = slugs.map((s: any) => ({ id: s.slug }));
+        // Combine and dedup if necessary
+        return [...mockParams, ...sanityParams];
+    } catch (error) {
+        console.error("Sanity slug fetch failed:", error);
+        return mockParams;
+    }
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
-    const car = cars.find((c) => c.id === id);
+    let car = cars.find((c) => c.id === id);
+
+    if (!car) {
+        try {
+            const sanityCar = await client.fetch(CAR_BY_SLUG_QUERY, { slug: id });
+            if (sanityCar) car = mapSanityCarToCar(sanityCar);
+        } catch (e) { }
+    }
+
     if (!car) return { title: "Car Not Found" };
 
     return {
@@ -24,7 +42,23 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
 
 export default async function CarDetailPage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
-    const car = cars.find((car) => car.id === id);
+
+    // 1. Try Mock Data first (speed) or last? 
+    // Usually CMS > Mock. But for now Mock is guaranteed.
+    // Let's check Mock first for existing IDs '1', '2'.
+    let car = cars.find((car) => car.id === id);
+
+    // 2. If not found, check Sanity
+    if (!car) {
+        try {
+            const sanityCar = await client.fetch(CAR_BY_SLUG_QUERY, { slug: id });
+            if (sanityCar) {
+                car = mapSanityCarToCar(sanityCar);
+            }
+        } catch (error) {
+            console.error("Sanity car fetch failed:", error);
+        }
+    }
 
     if (!car) {
         notFound();

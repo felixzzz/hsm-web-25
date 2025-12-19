@@ -1,16 +1,21 @@
 "use client";
 
 import { useState } from "react";
-import { cars } from "@/data/cars";
+import { Car } from "@/data/cars";
 import { CarCard } from "@/components/ui/CarCard";
 import { motion } from "framer-motion";
+import { cn } from "@/lib/utils";
 
 const tabs = ["All", "Used Car", "Rent Car"];
 
-export function FeaturedCars() {
+interface FeaturedCarsProps {
+    initialCars: Car[];
+}
+
+export function FeaturedCars({ initialCars }: FeaturedCarsProps) {
     const [activeTab, setActiveTab] = useState("All");
 
-    const filteredCars = cars.filter(car => {
+    const filteredCars = initialCars.filter(car => {
         if (activeTab === "All") return true;
         if (activeTab === "Used Car") return car.type === 'Used' || car.type === 'Both';
         if (activeTab === "Rent Car") return car.type === 'Rent' || car.type === 'Both';
@@ -32,10 +37,12 @@ export function FeaturedCars() {
                             <button
                                 key={tab}
                                 onClick={() => setActiveTab(tab)}
-                                className={`px-6 py-2 rounded-full text-sm font-medium transition-all ${activeTab === tab
+                                className={cn(
+                                    "px-6 py-2 rounded-full text-sm font-medium transition-all",
+                                    activeTab === tab
                                         ? 'bg-hsm-blue text-white shadow-md'
                                         : 'text-gray-500 hover:text-hsm-blue'
-                                    }`}
+                                )}
                             >
                                 {tab}
                             </button>
