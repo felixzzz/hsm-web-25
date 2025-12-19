@@ -38,7 +38,7 @@ export function Navbar() {
                 {/* Logo */}
                 <Link href="/" className="relative h-6 w-32 md:w-36">
                     <Image
-                        src="/images/hyundai-logo.svg"
+                        src="/images/hyundai-logo.png"
                         alt="Hyundai"
                         fill
                         className="object-contain"
