@@ -1,14 +1,16 @@
 export interface Car {
     id: string;
     name: string;
+    displayName?: { en: string; id: string };
+    description?: { en: string; id: string };
     model: string;
     year: number;
     type: 'Used' | 'Rent' | 'Both';
     price: number;
     rentPrice?: number; // Daily rate estimate
     mileage: number;
-    transmission: 'Automatic' | 'Manual';
-    fuel: 'Petrol' | 'Diesel' | 'Electric';
+    transmission: 'Automatic' | 'Manual' | 'iVT' | 'DCT';
+    fuel: 'Petrol' | 'Diesel' | 'Electric' | 'Hybrid';
     image: string;
     available: boolean;
 }
@@ -17,6 +19,8 @@ export const cars: Car[] = [
     {
         id: '1',
         name: 'Hyundai Creta Prime',
+        displayName: { en: "Hyundai Creta Prime", id: "Hyundai Creta Prime" },
+        description: { en: "The perfect SUV for urban adventures.", id: "SUV sempurna untuk petualangan perkotaan." },
         model: 'Creta',
         year: 2023,
         type: 'Both',
@@ -25,12 +29,14 @@ export const cars: Car[] = [
         mileage: 12000,
         transmission: 'Automatic',
         fuel: 'Petrol',
-        image: '/images/car-placeholder.png',
+        image: '/images/cars/creta.png',
         available: true,
     },
     {
         id: '2',
         name: 'Hyundai Stargazer X',
+        displayName: { en: "Hyundai Stargazer X", id: "Hyundai Stargazer X" },
+        description: { en: "Family comfort redefined.", id: "Kenyamanan keluarga yang didefinisikan ulang." },
         model: 'Stargazer',
         year: 2023,
         type: 'Used',
@@ -38,12 +44,14 @@ export const cars: Car[] = [
         mileage: 8500,
         transmission: 'Automatic',
         fuel: 'Petrol',
-        image: '/images/car-placeholder.png',
+        image: '/images/cars/stargazer-x.png',
         available: true,
     },
     {
         id: '3',
         name: 'Hyundai Ioniq 5 Signature',
+        displayName: { en: "Hyundai Ioniq 5 Signature", id: "Hyundai Ioniq 5 Signature" },
+        description: { en: "Future electric mobility, today.", id: "Mobilitas listrik masa depan, hari ini." },
         model: 'Ioniq 5',
         year: 2024,
         type: 'Both',
@@ -52,12 +60,14 @@ export const cars: Car[] = [
         mileage: 2000,
         transmission: 'Automatic',
         fuel: 'Electric',
-        image: '/images/car-placeholder.png',
+        image: '/images/cars/ioniq-5.png',
         available: true,
     },
     {
         id: '4',
         name: 'Hyundai Palisade Signature',
+        displayName: { en: "Hyundai Palisade Signature", id: "Hyundai Palisade Signature" },
+        description: { en: "Premium flagship SUV.", id: "SUV flagship premium." },
         model: 'Palisade',
         year: 2022,
         type: 'Used',
@@ -65,12 +75,14 @@ export const cars: Car[] = [
         mileage: 25000,
         transmission: 'Automatic',
         fuel: 'Diesel',
-        image: '/images/car-placeholder.png',
+        image: '/images/cars/palisade.jpg',
         available: true,
     },
     {
         id: '5',
         name: 'Hyundai Santa Fe Gas',
+        displayName: { en: "Hyundai Santa Fe Gas", id: "Hyundai Santa Fe Gas" },
+        description: { en: "Bold and beautiful.", id: "Berani dan indah." },
         model: 'Santa Fe',
         year: 2021,
         type: 'Rent',
@@ -79,12 +91,14 @@ export const cars: Car[] = [
         mileage: 45000,
         transmission: 'Automatic',
         fuel: 'Petrol',
-        image: '/images/car-placeholder.png',
+        image: '/images/cars/santa-fe.png',
         available: true,
     },
     {
         id: '6',
         name: 'Hyundai Creta Trend',
+        displayName: { en: "Hyundai Creta Trend", id: "Hyundai Creta Trend" },
+        description: { en: "Start your journey.", id: "Mulai perjalanan Anda." },
         model: 'Creta',
         year: 2022,
         type: 'Used',
@@ -92,12 +106,14 @@ export const cars: Car[] = [
         mileage: 18000,
         transmission: 'Manual',
         fuel: 'Petrol',
-        image: '/images/car-placeholder.png',
+        image: '/images/cars/creta.png',
         available: true,
     },
     {
         id: '7',
         name: 'Hyundai Staria 9-Seater',
+        displayName: { en: "Hyundai Staria 9-Seater", id: "Hyundai Staria 9-Seater" },
+        description: { en: "Larger than life comfort.", id: "Kenyamanan luar biasa." },
         model: 'Staria',
         year: 2023,
         type: 'Rent',
@@ -106,12 +122,14 @@ export const cars: Car[] = [
         mileage: 10000,
         transmission: 'Automatic',
         fuel: 'Diesel',
-        image: '/images/car-placeholder.png',
+        image: '/images/cars/staria.png',
         available: true,
     },
     {
         id: '8',
         name: 'Hyundai Kona EV',
+        displayName: { en: "Hyundai Kona EV", id: "Hyundai Kona EV" },
+        description: { en: "Compact electric SUV.", id: "SUV listrik kompak." },
         model: 'Kona',
         year: 2021,
         type: 'Used',
@@ -119,12 +137,14 @@ export const cars: Car[] = [
         mileage: 32000,
         transmission: 'Automatic',
         fuel: 'Electric',
-        image: '/images/car-placeholder.png',
+        image: '/images/cars/kona-ev.png',
         available: true,
     },
     {
         id: '9',
         name: 'Hyundai Stargazer Active',
+        displayName: { en: "Hyundai Stargazer Active", id: "Hyundai Stargazer Active" },
+        description: { en: "Active lifestyle choice.", id: "Pilihan gaya hidup aktif." },
         model: 'Stargazer',
         year: 2023,
         type: 'Both',
@@ -133,7 +153,7 @@ export const cars: Car[] = [
         mileage: 5000,
         transmission: 'Manual',
         fuel: 'Petrol',
-        image: '/images/car-placeholder.png',
+        image: '/images/cars/stargazer.png',
         available: true,
     },
 ];

@@ -1,0 +1,62 @@
+{
+    "HomePage": {
+        "heroTitle": "Wujudkan Mimpi Bersama Hyundai",
+        "heroSubtitle": "Rasakan masa depan mobilitas dengan pilihan kendaraan listrik dan bensin premium kami.",
+        "ctaUsed": "Lihat Mobil Bekas",
+        "ctaRent": "Sewa Mobil",
+        "featuredTitle": "Inventaris Pilihan",
+        "featuredSubtitle": "Jelajahi pilihan kendaraan Hyundai yang telah diverifikasi.",
+        "servicesTitle": "Mengapa Memilih HSM?",
+        "servicesSubtitle": "Kami menyediakan solusi mobilitas komprehensif untuk kebutuhan Anda."
+    },
+    "Navbar": {
+        "home": "Beranda",
+        "used": "Mobil Bekas",
+        "rent": "Sewa",
+        "contact": "Hubungi Kami"
+    },
+    "Featured": {
+        "all": "Semua",
+        "used": "Mobil Bekas",
+        "rent": "Sewa Mobil"
+    },
+    "Common": {
+        "viewDetails": "Lihat Detail",
+        "purchasePrice": "Harga Beli",
+        "rentPrice": "Sewa Mulai Dari",
+        "month": "bln",
+        "contactSupport": "Hubungi Kami"
+    },
+    "Footer": {
+        "aboutTitle": "Hyundai Solusi Mobilitas",
+        "aboutDesc": "Mitra terpercaya Anda untuk mobil bekas Hyundai bersertifikat dan layanan sewa premium di Indonesia.",
+        "servicesTitle": "Layanan",
+        "certifiedUsed": "Mobil Bekas Bersertifikat",
+        "rentalServices": "Layanan Sewa",
+        "financingSim": "Simulasi Kredit",
+        "contactTitle": "Kontak",
+        "privacy": "Kebijakan Privasi",
+        "terms": "Syarat & Ketentuan"
+    },
+    "CarDetails": {
+        "transmission": "Transmisi",
+        "fuel": "Bahan Bakar",
+        "mileage": "Jarak Tempuh",
+        "year": "Tahun",
+        "stock": "Stok",
+        "available": "Tersedia",
+        "sold": "Terjual",
+        "transmissions": {
+            "Automatic": "Otomatis",
+            "Manual": "Manual",
+            "iVT": "iVT",
+            "DCT": "DCT"
+        },
+        "fuels": {
+            "Petrol": "Bensin",
+            "Diesel": "Solar",
+            "Electric": "Listrik",
+            "Hybrid": "Hybrid"
+        }
+    }
+}

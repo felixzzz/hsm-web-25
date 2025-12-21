@@ -1,7 +1,8 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ShieldCheck, CalendarClock, Wrench, Coins } from "lucide-react";
+import { ShieldCheck, CalendarClock } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 const features = [
     {
@@ -23,12 +24,14 @@ const features = [
 ];
 
 export function Services() {
+    const t = useTranslations('HomePage');
+
     return (
         <section className="py-20 bg-white" id="services">
             <div className="container mx-auto px-6">
                 <div className="text-center mb-16">
-                    <h2 className="text-3xl md:text-4xl font-bold mb-4">Our Services</h2>
-                    <p className="text-gray-600 max-w-2xl mx-auto">Providing mobility solutions that fit your lifestyle, whether you want to own or rent.</p>
+                    <h2 className="text-3xl md:text-4xl font-bold mb-4">{t('servicesTitle')}</h2>
+                    <p className="text-gray-600 max-w-2xl mx-auto">{t('servicesSubtitle')}</p>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">

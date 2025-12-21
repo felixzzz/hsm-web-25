@@ -5,20 +5,22 @@ import { Car } from "@/data/cars";
 import { CarCard } from "@/components/ui/CarCard";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
+import { useTranslations } from "next-intl";
 
-const tabs = ["All", "Used Car", "Rent Car"];
+const tabIds = ["all", "used", "rent"];
 
 interface FeaturedCarsProps {
     initialCars: Car[];
 }
 
 export function FeaturedCars({ initialCars }: FeaturedCarsProps) {
-    const [activeTab, setActiveTab] = useState("All");
+    const [activeTab, setActiveTab] = useState("all");
+    const t = useTranslations();
 
     const filteredCars = initialCars.filter(car => {
-        if (activeTab === "All") return true;
-        if (activeTab === "Used Car") return car.type === 'Used' || car.type === 'Both';
-        if (activeTab === "Rent Car") return car.type === 'Rent' || car.type === 'Both';
+        if (activeTab === "all") return true;
+        if (activeTab === "used") return car.type === 'Used' || car.type === 'Both';
+        if (activeTab === "rent") return car.type === 'Rent' || car.type === 'Both';
         return true;
     });
 
@@ -27,13 +29,13 @@ export function FeaturedCars({ initialCars }: FeaturedCarsProps) {
             <div className="container mx-auto px-6">
                 <div className="flex flex-col md:flex-row justify-between items-end mb-12">
                     <div className="mb-6 md:mb-0">
-                        <h2 className="text-3xl md:text-4xl font-bold mb-4">Featured Inventory</h2>
-                        <p className="text-gray-600">Explore our curated selection of verified Hyundai vehicles.</p>
+                        <h2 className="text-3xl md:text-4xl font-bold mb-4">{t('HomePage.featuredTitle')}</h2>
+                        <p className="text-gray-600">{t('HomePage.featuredSubtitle')}</p>
                     </div>
 
                     {/* Tabs */}
                     <div className="flex bg-white p-1 rounded-full shadow-sm">
-                        {tabs.map(tab => (
+                        {tabIds.map(tab => (
                             <button
                                 key={tab}
                                 onClick={() => setActiveTab(tab)}
@@ -44,7 +46,7 @@ export function FeaturedCars({ initialCars }: FeaturedCarsProps) {
                                         : 'text-gray-500 hover:text-hsm-blue'
                                 )}
                             >
-                                {tab}
+                                {t(`Featured.${tab}`)}
                             </button>
                         ))}
                     </div>

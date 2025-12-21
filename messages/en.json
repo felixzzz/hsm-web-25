@@ -1,0 +1,62 @@
+{
+    "HomePage": {
+        "heroTitle": "Drive Your Dreams with Hyundai",
+        "heroSubtitle": "Experience the future of mobility with our premium selection of electric and gasoline vehicles.",
+        "ctaUsed": "Browse Used Cars",
+        "ctaRent": "Rent a Car",
+        "featuredTitle": "Featured Inventory",
+        "featuredSubtitle": "Explore our curated selection of verified Hyundai vehicles.",
+        "servicesTitle": "Why Choose HSM?",
+        "servicesSubtitle": "We provide comprehensive mobility solutions for your needs."
+    },
+    "Navbar": {
+        "home": "Home",
+        "used": "Used Cars",
+        "rent": "Rent",
+        "contact": "Contact Us"
+    },
+    "Featured": {
+        "all": "All",
+        "used": "Used Car",
+        "rent": "Rent Car"
+    },
+    "Common": {
+        "viewDetails": "View Details",
+        "purchasePrice": "Purchase Price",
+        "rentPrice": "Rental Starting From",
+        "month": "mo",
+        "contactSupport": "Chat Support"
+    },
+    "Footer": {
+        "aboutTitle": "Hyundai Solusi Mobilitas",
+        "aboutDesc": "Your trusted partner for certified used Hyundai cars and premium rental services in Indonesia.",
+        "servicesTitle": "Services",
+        "certifiedUsed": "Certified Used Cars",
+        "rentalServices": "Rental Services",
+        "financingSim": "Financing Simulation",
+        "contactTitle": "Contact",
+        "privacy": "Privacy Policy",
+        "terms": "Terms of Service"
+    },
+    "CarDetails": {
+        "transmission": "Transmission",
+        "fuel": "Fuel Type",
+        "mileage": "Mileage",
+        "year": "Year",
+        "stock": "Stock",
+        "available": "Available",
+        "sold": "Sold",
+        "transmissions": {
+            "Automatic": "Automatic",
+            "Manual": "Manual",
+            "iVT": "iVT",
+            "DCT": "DCT"
+        },
+        "fuels": {
+            "Petrol": "Petrol",
+            "Diesel": "Diesel",
+            "Electric": "Electric",
+            "Hybrid": "Hybrid"
+        }
+    }
+}

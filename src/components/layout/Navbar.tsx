@@ -1,14 +1,20 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import Link from "next/link";
 import Image from "next/image";
 import { Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { Link, usePathname, useRouter } from "@/i18n/routing";
+import { useTranslations, useLocale } from "next-intl";
 
 export function Navbar() {
     const [isScrolled, setIsScrolled] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+    const t = useTranslations('Navbar');
+    const locale = useLocale();
+    const pathname = usePathname();
+    const isHomePage = pathname === '/';
+    const router = useRouter();
 
     useEffect(() => {
         const handleScroll = () => {
@@ -19,17 +25,20 @@ export function Navbar() {
     }, []);
 
     const navLinks = [
-        { name: "Home", href: "/" },
-        { name: "Used Cars", href: "#used-cars" },
-        { name: "Rent Car", href: "#rent-car" },
-        { name: "Simulation", href: "#simulation" },
+        { name: t('home'), href: "/" },
+        { name: t('used'), href: "/#used-cars" },
+        { name: t('rent'), href: "/#rent-car" },
     ];
+
+    const switchLocale = (newLocale: string) => {
+        router.replace(pathname, { locale: newLocale });
+    };
 
     return (
         <nav
             className={cn(
                 "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
-                isScrolled
+                isScrolled || !isHomePage
                     ? "bg-white/90 backdrop-blur-md shadow-sm py-4 text-hsm-blue"
                     : "bg-transparent py-6 text-white"
             )}
@@ -43,7 +52,7 @@ export function Navbar() {
                         fill
                         className="object-contain"
                         style={{
-                            filter: !isScrolled ? "brightness(0) invert(1)" : "none"
+                            filter: (!isScrolled && isHomePage) ? "brightness(0) invert(1)" : "none"
                         }}
                     />
                 </Link>
@@ -63,11 +72,27 @@ export function Navbar() {
                     {/* Language Switcher */}
                     <div className={cn(
                         "flex items-center gap-2 text-sm font-bold border-l pl-6",
-                        isScrolled ? "border-hsm-blue/20" : "border-white/20"
+                        isScrolled || !isHomePage ? "border-hsm-blue/20" : "border-white/20"
                     )}>
-                        <span className="cursor-pointer hover:text-hsm-sand transition-colors">EN</span>
+                        <button
+                            onClick={() => switchLocale('en')}
+                            className={cn(
+                                "cursor-pointer hover:text-hsm-sand transition-colors",
+                                locale === 'en' ? "text-hsm-sand" : "opacity-50 hover:opacity-100"
+                            )}
+                        >
+                            EN
+                        </button>
                         <span className="opacity-50">|</span>
-                        <span className="cursor-pointer opacity-50 hover:opacity-100 hover:text-hsm-sand transition-colors">ID</span>
+                        <button
+                            onClick={() => switchLocale('id')}
+                            className={cn(
+                                "cursor-pointer hover:text-hsm-sand transition-colors",
+                                locale === 'id' ? "text-hsm-sand" : "opacity-50 hover:opacity-100"
+                            )}
+                        >
+                            ID
+                        </button>
                     </div>
                 </div>
 
@@ -78,12 +103,12 @@ export function Navbar() {
                         target="_blank"
                         className={cn(
                             "px-6 py-2 rounded-full font-bold text-sm transition-all",
-                            isScrolled
+                            isScrolled || !isHomePage
                                 ? "bg-hsm-blue text-white hover:bg-hsm-dark"
                                 : "bg-white text-hsm-blue hover:bg-hsm-sand hover:text-hsm-dark"
                         )}
                     >
-                        Contact Us
+                        {t('contact')}
                     </Link>
                 </div>
 
@@ -109,6 +134,10 @@ export function Navbar() {
                             {link.name}
                         </Link>
                     ))}
+                    <div className="flex gap-4 pt-4 border-t border-gray-100">
+                        <button onClick={() => switchLocale('en')} className={locale === 'en' ? "font-bold text-hsm-blue" : "text-gray-500"}>EN</button>
+                        <button onClick={() => switchLocale('id')} className={locale === 'id' ? "font-bold text-hsm-blue" : "text-gray-500"}>ID</button>
+                    </div>
                 </div>
             )}
         </nav>

@@ -10,9 +10,9 @@ import { cars as mockCars, Car } from "@/data/cars";
 
 export const revalidate = 60; // Revalidate every 60 seconds
 
-async function getCars() {
+async function getCars(locale: string) {
   try {
-    const sanityCars = await client.fetch(ALL_CARS_QUERY);
+    const sanityCars = await client.fetch(ALL_CARS_QUERY, { language: locale });
     if (sanityCars && sanityCars.length > 0) {
       return sanityCars.map(mapSanityCarToCar);
     }
@@ -22,8 +22,13 @@ async function getCars() {
   return mockCars;
 }
 
-export default async function Home() {
-  const cars: Car[] = await getCars();
+export default async function Home({
+  params
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+  const cars: Car[] = await getCars(locale);
 
   return (
     <div className="flex flex-col min-h-screen">

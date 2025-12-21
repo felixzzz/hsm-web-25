@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { Link } from "@/i18n/routing";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { cars } from "@/data/cars";
@@ -6,52 +6,61 @@ import { ArrowLeft, Check, Phone, ShieldCheck } from "lucide-react";
 import { client } from "@/sanity/lib/client";
 import { CAR_BY_SLUG_QUERY, CAR_SLUGS_QUERY } from "@/sanity/lib/queries";
 import { mapSanityCarToCar } from "@/sanity/lib/mapper";
+import { routing } from '@/i18n/routing';
+import { getTranslations } from 'next-intl/server';
 
 // Generate segments for all cars (Mock + Sanity)
 export async function generateStaticParams() {
     const mockParams = cars.map((car) => ({ id: car.id }));
+    let carParams = mockParams;
+
     try {
         const slugs = await client.fetch(CAR_SLUGS_QUERY);
-        const sanityParams = slugs.map((s: any) => ({ id: s.slug }));
-        // Combine and dedup if necessary
-        return [...mockParams, ...sanityParams];
+        const sanityParams = slugs.map((s: any) => ({ id: s.slug })); // eslint-disable-line @typescript-eslint/no-explicit-any
+        carParams = [...mockParams, ...sanityParams];
     } catch (error) {
         console.error("Sanity slug fetch failed:", error);
-        return mockParams;
     }
+
+    return routing.locales.flatMap(locale =>
+        carParams.map(p => ({ locale, id: p.id }))
+    );
 }
 
-export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
-    const { id } = await params;
+export async function generateMetadata({ params }: { params: Promise<{ id: string, locale: string }> }) {
+    const { id, locale } = await params;
     let car = cars.find((c) => c.id === id);
 
     if (!car) {
         try {
-            const sanityCar = await client.fetch(CAR_BY_SLUG_QUERY, { slug: id });
+            const sanityCar = await client.fetch(CAR_BY_SLUG_QUERY, { slug: id, language: locale });
             if (sanityCar) car = mapSanityCarToCar(sanityCar);
-        } catch (e) { }
+        } catch { }
     }
 
     if (!car) return { title: "Car Not Found" };
 
+    const name = car.displayName?.[locale as 'en' | 'id'] || car.name;
+
     return {
-        title: `${car.name} | HSM`,
-        description: `Buy or Rent ${car.year} ${car.name}. Certified quality from Hyundai Solusi Mobilitas.`,
+        title: `${name} | HSM`,
+        description: `Buy or Rent ${car.year} ${name}. Certified quality from Hyundai Solusi Mobilitas.`,
     };
 }
 
-export default async function CarDetailPage({ params }: { params: Promise<{ id: string }> }) {
-    const { id } = await params;
+export default async function CarDetailPage({ params }: { params: Promise<{ id: string, locale: string }> }) {
+    const { id, locale } = await params;
+    const t = await getTranslations({ locale, namespace: 'CarDetails' });
+    const tCommon = await getTranslations({ locale, namespace: 'Common' });
 
-    // 1. Try Mock Data first (speed) or last? 
-    // Usually CMS > Mock. But for now Mock is guaranteed.
-    // Let's check Mock first for existing IDs '1', '2'.
+
+    // 1. Try Mock Data first (speed)
     let car = cars.find((car) => car.id === id);
 
     // 2. If not found, check Sanity
     if (!car) {
         try {
-            const sanityCar = await client.fetch(CAR_BY_SLUG_QUERY, { slug: id });
+            const sanityCar = await client.fetch(CAR_BY_SLUG_QUERY, { slug: id, language: locale });
             if (sanityCar) {
                 car = mapSanityCarToCar(sanityCar);
             }
@@ -68,8 +77,11 @@ export default async function CarDetailPage({ params }: { params: Promise<{ id: 
         return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumSignificantDigits: 3 }).format(price);
     };
 
+    const name = car.displayName?.[locale as 'en' | 'id'] || car.name;
+    const description = car.description?.[locale as 'en' | 'id'];
+
     return (
-        <div className="min-h-screen bg-white">
+        <div className="min-h-screen bg-white pt-20">
             {/* Navbar Placeholder/Back Button */}
             <div className="fixed top-24 left-6 z-40">
                 <Link
@@ -84,15 +96,16 @@ export default async function CarDetailPage({ params }: { params: Promise<{ id: 
             <div className="relative h-[50vh] md:h-[60vh] bg-hsm-gray">
                 <Image
                     src={car.image}
-                    alt={car.name}
+                    alt={name}
                     fill
                     className="object-cover"
                     priority
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
                 <div className="absolute bottom-0 left-0 right-0 p-6 md:p-12 text-white container mx-auto">
-                    <h1 className="text-4xl md:text-6xl font-bold mb-2">{car.name}</h1>
+                    <h1 className="text-4xl md:text-6xl font-bold mb-2">{name}</h1>
                     <p className="text-xl opacity-90">{car.year} • {car.mileage.toLocaleString()} km</p>
+                    {description && <p className="text-lg mt-4 max-w-2xl text-white/90">{description}</p>}
                 </div>
             </div>
 
@@ -104,19 +117,19 @@ export default async function CarDetailPage({ params }: { params: Promise<{ id: 
                         <h2 className="text-2xl font-bold mb-6">Specifications</h2>
                         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
                             <div className="p-4 bg-hsm-gray rounded-xl">
-                                <span className="block text-gray-500 text-xs uppercase mb-1">Transmission</span>
-                                <span className="font-bold">{car.transmission}</span>
+                                <span className="block text-gray-500 text-xs uppercase mb-1">{t('transmission')}</span>
+                                <span className="font-bold">{t(`transmissions.${car.transmission}`)}</span>
                             </div>
                             <div className="p-4 bg-hsm-gray rounded-xl">
-                                <span className="block text-gray-500 text-xs uppercase mb-1">Fuel Type</span>
-                                <span className="font-bold">{car.fuel}</span>
+                                <span className="block text-gray-500 text-xs uppercase mb-1">{t('fuel')}</span>
+                                <span className="font-bold">{t(`fuels.${car.fuel}`)}</span>
                             </div>
                             <div className="p-4 bg-hsm-gray rounded-xl">
-                                <span className="block text-gray-500 text-xs uppercase mb-1">Mileage</span>
+                                <span className="block text-gray-500 text-xs uppercase mb-1">{t('mileage')}</span>
                                 <span className="font-bold">{car.mileage.toLocaleString()} km</span>
                             </div>
                             <div className="p-4 bg-hsm-gray rounded-xl">
-                                <span className="block text-gray-500 text-xs uppercase mb-1">Year</span>
+                                <span className="block text-gray-500 text-xs uppercase mb-1">{t('year')}</span>
                                 <span className="font-bold">{car.year}</span>
                             </div>
                         </div>
@@ -140,22 +153,22 @@ export default async function CarDetailPage({ params }: { params: Promise<{ id: 
                             <div className="mb-8">
                                 {car.type !== 'Rent' && (
                                     <div className="mb-6">
-                                        <span className="text-gray-500 text-sm block mb-1">Purchase Price</span>
+                                        <span className="text-gray-500 text-sm block mb-1">{tCommon('purchasePrice')}</span>
                                         <span className="text-3xl font-bold text-hsm-blue block">{formatPrice(car.price)}</span>
                                     </div>
                                 )}
 
                                 {(car.type === 'Rent' || car.type === 'Both') && (
                                     <div>
-                                        <span className="text-gray-500 text-sm block mb-1">Rental Est.</span>
-                                        <span className="text-2xl font-bold text-hsm-dark block">{formatPrice(car.rentPrice || 8000000)}<span className="text-base font-normal text-gray-400">/mo</span></span>
+                                        <span className="text-gray-500 text-sm block mb-1">{tCommon('rentPrice')}</span>
+                                        <span className="text-2xl font-bold text-hsm-dark block">{formatPrice(car.rentPrice || 8000000)}<span className="text-base font-normal text-gray-400">/{tCommon('month')}</span></span>
                                     </div>
                                 )}
                             </div>
 
                             <div className="space-y-4">
                                 <Link
-                                    href={`https://wa.me/62812345678?text=Hi HSM, I am interested in ${car.name} (${car.id})`}
+                                    href={`https://wa.me/62812345678?text=Hi HSM, I am interested in ${name} (${car.id})`}
                                     target="_blank"
                                     className="w-full py-4 bg-[#25D366] text-white font-bold rounded-xl hover:bg-[#128C7E] transition-all flex items-center justify-center gap-2"
                                 >

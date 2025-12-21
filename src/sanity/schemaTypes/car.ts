@@ -14,6 +14,24 @@ export const car = defineType({
             validation: (Rule) => Rule.required(),
         }),
         defineField({
+            name: "displayName",
+            title: "Display Name (Localized)",
+            type: "object",
+            fields: [
+                defineField({ name: "en", title: "English", type: "string" }),
+                defineField({ name: "id", title: "Indonesian", type: "string" }),
+            ]
+        }),
+        defineField({
+            name: "description",
+            title: "Description (Localized)",
+            type: "object",
+            fields: [
+                defineField({ name: "en", title: "English", type: "text" }),
+                defineField({ name: "id", title: "Indonesian", type: "text" }),
+            ]
+        }),
+        defineField({
             name: "slug",
             title: "Slug",
             type: "slug",
